@@ -16,4 +16,4 @@ jobs:
           r-version: '4.2'  # Change version if needed
 
       - name: Count lines in CSV using R
-        run: Rscript -e 'data <- read.csv("data/example.csv"); cat("Number of lines:", nrow(data), "\n")'
+        run: Rscript R/count_lines.R

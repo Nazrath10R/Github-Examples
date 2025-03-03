@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Count lines in CSV file
-        run: echo "Number of lines: $(wc -l < data/example.csv)"
+        run: "echo \"Number of lines: $(wc -l < data/example.csv)\""

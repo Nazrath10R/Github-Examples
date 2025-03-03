@@ -1,0 +1,14 @@
+name: Count CSV Lines
+
+on: [push, pull_request]
+
+jobs:
+  count-lines:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Count lines in CSV file
+        run: echo "Number of lines: $(wc -l < data/example.csv)"

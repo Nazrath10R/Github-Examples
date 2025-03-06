@@ -19,7 +19,7 @@ jobs:
         run: Rscript data/count_data.R  # Run the R script
 
       - name: Upload Subset Data
-        uses: actions/upload-artifact@v3  # Save subset CSV for download
+        uses: actions/upload-artifact@v4  # Save subset CSV for download
         with:
           name: subset-example
           path: data/subset_example.csv

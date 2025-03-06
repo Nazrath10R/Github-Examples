@@ -16,7 +16,7 @@ jobs:
           r-version: '4.2'  # Specify R version
 
       - name: Run Data Quality Check
-        run: Rscript data/data_checks.R  # Run the R script
+        run: Rscript R/data_checks.R  # Run the R script
 
       - name: Upload Subset Data
         uses: actions/upload-artifact@v4  # Save subset CSV for download

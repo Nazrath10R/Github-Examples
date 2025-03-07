@@ -1,0 +1,14 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3Events",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "s3.amazonaws.com"
+            },
+            "Action": "events:PutEvents",
+            "Resource": "arn:aws:events:eu-west-2:879381246381:event-bus/default"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3ToPutEvents",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "s3.amazonaws.com"
+            },
+            "Action": "events:PutEvents",
+            "Resource": "arn:aws:events:eu-west-2:879381246381:event-bus/default",
+            "Condition": {
+                "ArnLike": {
+                    "aws:SourceArn": "arn:aws:s3:::bucket-for-github-action-nn"
+                }
+            }
+        }
+    ]
+}

@@ -1,18 +1,7 @@
-aws ssm put-parameter \
-    --name "/github/token" \
-    --value "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" \
-    --type "SecureString" \
-    --region eu-west-2
-
-
 aws ssm get-parameter \
     --name "/github/token" \
     --with-decryption \
     --region eu-west-2
-
-
-
-
 
 dos2unix lambda/run.sh lambda/bootstrap lambda/build.sh
 zip lambda-bash-custom-runtime.zip bootstrap run.sh

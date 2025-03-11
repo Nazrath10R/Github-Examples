@@ -13,7 +13,7 @@ fi
 # Adjust these to your repo details.
 GITHUB_OWNER="Nazrath10R"
 GITHUB_REPO="Github-Examples"
-WORKFLOW_FILE_NAME="main.yml"
+WORKFLOW_FILE_NAME="aws_lambda_github_trigger.yml"
 REF="main"
 
 TRIGGER_URL="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_FILE_NAME}/dispatches"

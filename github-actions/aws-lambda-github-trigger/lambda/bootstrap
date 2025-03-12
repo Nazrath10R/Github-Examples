@@ -7,7 +7,11 @@ AWS_LAMBDA_RUNTIME_API=${AWS_LAMBDA_RUNTIME_API:-"127.0.0.1:9001"}
 
 echo "Starting Custom Runtime bootstrap..." 1>&2
 
-while true; do
+COUNT=0
+MAX_RUNS=1  # Change this to allow only one execution
+
+while [[ "$COUNT" -lt "$MAX_RUNS" ]]; do
+    COUNT=$((COUNT + 1))
   # 1. Get an event from the Lambda Runtime API
   #    This blocks until an event is available.
   resp_headers=$(mktemp)

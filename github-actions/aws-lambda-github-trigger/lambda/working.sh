@@ -20,18 +20,19 @@
 #   --environment "Variables={GITHUB_TOKEN=<YOUR_GH_TOKEN>}"
 
 
-aws lambda create-function \
-    --function-name "TriggerGitHubActions" \
-    --runtime provided.al2 \
-    --role "arn:aws:iam::879381246381:role/LambdaGitHubTriggerRole" \
-    --handler "bootstrap" \
-    --zip-file "fileb://lambda-bash-custom-runtime.zip" \
-    --region eu-west-2
+# aws lambda create-function \
+#     --function-name "TriggerGitHubActions" \
+#     --runtime provided.al2 \
+#     --role "arn:aws:iam::879381246381:role/LambdaGitHubTriggerRole" \
+#     --handler "bootstrap" \
+#     --zip-file "fileb://lambda-bash-custom-runtime.zip" \
+#     --region eu-west-2
 
 
-aws lambda invoke \
-    --function-name "TriggerGitHubActions" \
-    --payload '{}' \
-    --cli-binary-format raw-in-base64-out \
-    --region eu-west-2 \
-    out.json
+# aws lambda invoke \
+#     --function-name "TriggerGitHubActions" \
+#     --payload '{}' \
+#     --cli-binary-format raw-in-base64-out \
+#     --region eu-west-2 \
+#     out.json
+

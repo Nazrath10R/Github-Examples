@@ -3,7 +3,7 @@ import boto3
 import requests
 import os
 
-GITHUB_REPO = "your_username/your_repository"
+GITHUB_REPO = "Nazrath10R/Github-Examples"
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 GITHUB_WORKFLOW = "s3_fetch_process.yml"
 

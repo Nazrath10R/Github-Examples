@@ -28,7 +28,7 @@ jobs:
         run: |
           mkdir -p data models
           aws s3 cp s3://bucket-for-ml-predictions-nn/models/${{ github.event.inputs.model_version }} models/
-          aws s3 cp --recursive s3://bucket-for-ml-predictions-nn/data/${{ github.event.inputs.dataset_version }}/ data/${{ github.event.inputs.dataset_version }}/
+        aws s3 cp --recursive s3://bucket-for-ml-predictions-nn/data/${{ github.event.inputs.dataset_version }}/ data/${{ github.event.inputs.dataset_version }}/
   
       - name: Verify Downloaded Files
         run: |
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          Rscript -e 'install.packages(c("dplyr", "tidymodels"))'
+          Rscript -e 'install.packages(c("dplyr", "randomForest", "tidymodels"))'
 
       - name: Run ML Prediction
         run: Rscript R/predict_ml.R ${{ github.event.inputs.model_version }} ${{ github.event.inputs.dataset_version }}

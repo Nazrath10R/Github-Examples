@@ -15,10 +15,6 @@ print(paste0("📌 Dataset version: ", dataset_version))
 model_path <- paste0("models/", model_version)
 data_path <- paste0("data/", dataset_version, "/")
 
-if (found_files < length(required_files)) {
-  stop("❌ ERROR: One or more required files are missing!")
-}
-
 
 print(paste0("📂 Checking if model exists: ", model_path, "_rf_model.Rds"))
 if (!file.exists(paste0(model_path, "_rf_model.Rds"))) {

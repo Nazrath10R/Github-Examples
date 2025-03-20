@@ -34,9 +34,12 @@ required_files <- c(
   "df_design_qqq.csv"
 )
 
+found_files <- 0  # Initialize before the loop
+
 for (file in required_files) {
   full_path <- file.path(data_path, paste0(dataset_version, "_", file))
   print(paste0("📂 Checking file: ", full_path))
+  
   if (file.exists(full_path)) {
     found_files <- found_files + 1
     print(paste0("✅ Found: ", full_path))
@@ -44,6 +47,12 @@ for (file in required_files) {
     print(paste0("⚠️ Warning: Missing file - ", full_path))
   }
 }
+
+# Stop execution if any file is missing
+if (found_files != length(required_files)) {
+  stop("❌ ERROR: One or more required files are missing!")
+}
+
 
 # Load data
 qqq <- read.csv(paste0(data_path, "nn2501281606_qqq_for_aws.csv"))

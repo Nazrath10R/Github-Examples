@@ -56,8 +56,8 @@ print(paste0("✅ Loaded df_design_qqq data: ", nrow(df_design_qqq), " rows, ", 
 
 
 ## load model
-load(paste0(model_path, "_rf_model.Rds"))
-
+load(file.path(model_path, model_version, "_rf_model.Rds"))
+print(paste0("✅ Loaded Random Forest model: ", model_version))
 
 ## Data preperation
 feature_list <- unique(qqq[which(qqq$Protein!="ENO1_SPIKE"),]$unique)
@@ -156,6 +156,12 @@ test_data$Disease <- NULL
 
 # feature list
 selected_features=feature_list
+
+missing_features <- setdiff(selected_features, colnames(test_data))
+if (length(missing_features) > 0) {
+  stop(paste0("❌ ERROR: Missing features in dataset: ", paste(missing_features, collapse = ", ")))
+}
+
 
 # Recipe for preprocessing the full test dataset
 test_recipe <- test_data %>%

@@ -30,6 +30,15 @@ jobs:
           aws s3 cp s3://bucket-for-ml-predictions-nn/models/${{ github.event.inputs.model_version }} models/
           aws s3 cp --recursive s3://bucket-for-ml-predictions-nn/data/${{ github.event.inputs.dataset_version }}/ data/
 
+      - name: Verify Downloaded Files
+        run: |
+          echo "Checking files in models/"
+          ls -lh models/
+          echo "Checking files in data/"
+          ls -lh data/
+          echo "Checking files in dataset folder"
+          ls -lh data/${{ github.event.inputs.dataset_version }}/
+
       - name: Install R
         uses: r-lib/actions/setup-r@v2
         with:

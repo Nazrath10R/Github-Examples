@@ -82,4 +82,3 @@ aws lambda update-function-configuration \
     --environment "Variables={GITHUB_TOKEN=$personal_access_token}"
 
 aws lambda get-function-configuration --function-name trigger_ml_workflow
-

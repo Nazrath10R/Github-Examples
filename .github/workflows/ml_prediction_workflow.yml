@@ -28,8 +28,8 @@ jobs:
         run: |
           mkdir -p data models
           aws s3 cp s3://bucket-for-ml-predictions-nn/models/${{ github.event.inputs.model_version }} models/
-          aws s3 cp --recursive s3://bucket-for-ml-predictions-nn/data/${{ github.event.inputs.dataset_version }}/ data/
-
+          aws s3 cp --recursive s3://bucket-for-ml-predictions-nn/data/${{ github.event.inputs.dataset_version }}/ data/${{ github.event.inputs.dataset_version }}/
+  
       - name: Verify Downloaded Files
         run: |
           echo "Checking files in models/"

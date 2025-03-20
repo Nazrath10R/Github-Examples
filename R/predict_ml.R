@@ -15,25 +15,6 @@ print(paste0("📌 Dataset version: ", dataset_version))
 model_path <- paste0("models/", model_version)
 data_path <- paste0("data/", dataset_version, "/")
 
-# Check if paths exists
-required_files <- c(
-  "qqq_for_aws.csv",
-  "srm_table_for_aws.csv",
-  "scaling_df_sum.csv",
-  "df_design_qqq.csv"
-)
-
-found_files <- 0
-for (file in required_files) {
-  full_path <- paste0(data_path, "nn2501281606_", file)
-  print(paste0("📂 Checking file: ", full_path))
-  if (file.exists(full_path)) {
-    found_files <- found_files + 1
-  } else {
-    print(paste0("⚠️ Warning: Missing file - ", file))
-  }
-}
-
 if (found_files < length(required_files)) {
   stop("❌ ERROR: One or more required files are missing!")
 }
@@ -54,10 +35,13 @@ required_files <- c(
 )
 
 for (file in required_files) {
-  full_path <- paste0(data_path, "nn2501281606_", file)
+  full_path <- file.path(data_path, paste0(dataset_version, "_", file))
   print(paste0("📂 Checking file: ", full_path))
-  if (!file.exists(full_path)) {
-    stop(paste0("❌ ERROR: Missing file - ", file))
+  if (file.exists(full_path)) {
+    found_files <- found_files + 1
+    print(paste0("✅ Found: ", full_path))
+  } else {
+    print(paste0("⚠️ Warning: Missing file - ", full_path))
   }
 }
 

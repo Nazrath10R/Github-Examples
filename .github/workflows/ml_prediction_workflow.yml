@@ -1,0 +1,49 @@
+name: ML Prediction Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      model_version:
+        description: 'Model Version (e.g., rf_model_1.Rds)'
+        required: true
+      dataset_version:
+        description: 'Dataset Version (e.g., dataset_1)'
+        required: true
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ secrets.AWS_REGION }}
+
+      - name: Fetch Model and Data from S3
+        run: |
+          mkdir -p data models
+          aws s3 cp s3://bucket-for-ml-predictions-nn/models/${{ github.event.inputs.model_version }} models/
+          aws s3 cp --recursive s3://bucket-for-ml-predictions-nn/data/${{ github.event.inputs.dataset_version }}/ data/
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.2'
+
+      - name: Install Dependencies
+        run: |
+          Rscript -e 'install.packages(c("dplyr", "tidymodels"))'
+
+      - name: Run ML Prediction
+        run: Rscript R/predict_ml.R ${{ github.event.inputs.model_version }} ${{ github.event.inputs.dataset_version }}
+
+      - name: Upload Predictions
+        uses: actions/upload-artifact@v4
+        with:
+          name: predictions-${{ github.event.inputs.dataset_version }}
+          path: data/predictions.csv

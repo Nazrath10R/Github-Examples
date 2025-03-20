@@ -16,8 +16,8 @@ model_path <- paste0("models/", model_version)
 data_path <- paste0("data/", dataset_version, "/")
 
 
-print(paste0("📂 Checking if model exists: ", model_path, "_rf_model.Rds"))
-if (!file.exists(paste0(model_path, "_rf_model.Rds"))) {
+print(paste0("📂 Checking if model exists: ", model_path))
+if (!file.exists(model_path)) {
   stop("❌ ERROR: Model file not found! Check model path and filename.")
 }
 

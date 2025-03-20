@@ -63,7 +63,7 @@ print(paste0("✅ Loaded df_design_qqq data: ", nrow(df_design_qqq), " rows, ", 
 
 
 ## load model
-load(file.path(model_path, model_version, "_rf_model.Rds"))
+load(model_path)
 print(paste0("✅ Loaded Random Forest model: ", model_version))
 
 ## Data preperation

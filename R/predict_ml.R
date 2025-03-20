@@ -1,20 +1,47 @@
-
 # Rscript predict_ml "nn2501281606" "nn2501281606"
+
+library(dplyr)
+library(tidymodels)
 
 # take in arguments from the command line
 args <- commandArgs(trailingOnly = TRUE)
 model_version <- args[1]
 dataset_version <- args[2]
 
-library(dplyr)
-library(tidymodels)
+print(paste0("📌 Model version: ", model_version))
+print(paste0("📌 Dataset version: ", dataset_version)) 
 
 # Define paths
 model_path <- paste0("models/", model_version)
 data_path <- paste0("data/", dataset_version, "/")
 
-# model_path <- "C:/Users/naz/Documents/Github-Examples/R/models/nn2501281606_rf_model.Rds"
-# data_path <- "C:/Users/naz/Documents/Github-Examples/R/data/1/"
+# Check if paths exists
+print(paste0("📂 Checking dataset path: ", data_path))
+if (!dir.exists(data_path)) {
+  stop("❌ ERROR: Dataset folder not found! Ensure correct dataset version.")
+}
+
+print(paste0("📂 Checking if model exists: ", model_path, "_rf_model.Rds"))
+if (!file.exists(paste0(model_path, "_rf_model.Rds"))) {
+  stop("❌ ERROR: Model file not found! Check model path and filename.")
+}
+
+
+# Check if required files exist
+required_files <- c(
+  "qqq_for_aws.csv",
+  "srm_table_for_aws.csv",
+  "scaling_df_sum.csv",
+  "df_design_qqq.csv"
+)
+
+for (file in required_files) {
+  full_path <- paste0(data_path, "nn2501281606_", file)
+  print(paste0("📂 Checking file: ", full_path))
+  if (!file.exists(full_path)) {
+    stop(paste0("❌ ERROR: Missing file - ", file))
+  }
+}
 
 # Load data
 qqq <- read.csv(paste0(data_path, "nn2501281606_qqq_for_aws.csv"))
@@ -22,12 +49,24 @@ srm_table <- read.csv(paste0(data_path, "nn2501281606_srm_table_for_aws.csv"))
 scaling_df_sum <- read.csv(paste0(data_path, "nn2501281606_scaling_df_sum.csv"))
 df_design_qqq <- read.csv(paste0(data_path, "nn2501281606_df_design_qqq.csv"))
 
+print(paste0("✅ Loaded qqq data: ", nrow(qqq), " rows, ", ncol(qqq), " columns"))
+print(paste0("✅ Loaded srm_table data: ", nrow(srm_table), " rows, ", ncol(srm_table), " columns"))
+print(paste0("✅ Loaded scaling_df_sum data: ", nrow(scaling_df_sum), " rows, ", ncol(scaling_df_sum), " columns"))
+print(paste0("✅ Loaded df_design_qqq data: ", nrow(df_design_qqq), " rows, ", ncol(df_design_qqq), " columns"))
+
 
 ## load model
 load(paste0(model_path, "_rf_model.Rds"))
 
+
 ## Data preperation
 feature_list <- unique(qqq[which(qqq$Protein!="ENO1_SPIKE"),]$unique)
+
+print(paste0("📊 Feature List Size: ", length(feature_list)))
+if (length(feature_list) == 0) {
+  stop("❌ ERROR: No features found! Check dataset preprocessing.")
+}
+
 
 qqq_df <- qqq %>% select(biomarkerid_z, unique, sample, Fragment, QuantBestarea)
 qqq_df$frag_mean_int <- NA
@@ -137,11 +176,23 @@ rf_test_predictions <- data.frame(
   "RF_Predictions" = rf_test_preds$.pred_class
 )
 
+# Check if predictions were made
+if (nrow(rf_test_predictions) == 0) {
+  stop("❌ ERROR: Model produced no predictions!")
+} else {
+  print(paste0("✅ Model predictions completed. Total predictions: ", nrow(rf_test_predictions)))
+}
+
+
 print(paste0("correct predictions: ",
              length(which(rf_test_predictions$Disease==rf_test_predictions$RF_Predictions)),
              " / 12"))
 
+
 write.csv(rf_test_predictions, paste0(data_path, "predictions.csv"), row.names = FALSE)
 
-
-print("✅ Predictions saved!")
+if (file.exists(paste0(data_path, "predictions.csv"))) {
+  print("✅ Predictions successfully saved!")
+} else {
+  stop("❌ ERROR: Failed to save predictions file.")
+}

@@ -235,10 +235,15 @@ extra <- setdiff(colnames(processed_test_df), expected_cols)
 print(paste("❌ Missing columns:", toString(missing)))
 print(paste("⚠️ Extra columns:", toString(extra)))
 
-if (length(rf_model$lvl) == 0) {
-  message("⚠️ Setting class levels manually...")
-  rf_model$lvl <- c("AML", "HCC")
+if (is.null(rf_model$lvl) || length(rf_model$lvl) == 0) {
+  rf_model$lvl <- levels(rf_model$fit$y)
 }
+
+print("Check rf_model$fit$y class:")
+print(class(rf_model$fit$y))
+print("Levels:")
+print(levels(rf_model$fit$y))
+
 
 print("✅ Predicting using parsnip-wrapped model")
 rf_test_preds <- predict(rf_model, new_data = processed_test_df, type = "class")

@@ -61,4 +61,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: predictions-${{ github.event.inputs.dataset_version }}
-          path: data/${{ env.dataset_version }}/predictions.csv
+          path: data/${{ github.event.inputs.dataset_version }}/predictions.csv

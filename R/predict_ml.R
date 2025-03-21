@@ -261,8 +261,11 @@ rf_model$spec$method$pred$class$post <- function(result, object) {
   factor(result, levels = lvls, ordered = FALSE)
 }
 
-rf_test_preds <- predict(rf_model, new_data = processed_test_df, type = "class")
-print(rf_test_preds)
+# rf_test_preds <- predict(rf_model, new_data = processed_test_df, type = "class")
+# print(rf_test_preds)
+
+raw_preds <- predict(rf_model$fit, newdata = processed_test_df)
+rf_test_preds <- tibble(.pred_class = factor(raw_preds, levels = levels(rf_model$fit$y)))
 
 
 # Check predictions

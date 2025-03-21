@@ -244,12 +244,13 @@ print(class(rf_model$fit$y))
 print("Levels:")
 print(levels(rf_model$fit$y))
 
-# Monkey patch the model to include a 'post' function that explicitly sets levels
+print("✅ Predicting using parsnip-wrapped model")
+
+# ✅ Patch the model prediction handler to fix 'ordered' error
 rf_model$spec$method$pred$class$post <- function(result, object) {
-  factor(result, levels = object$lvl)
+  factor(result, levels = object$lvl, ordered = FALSE)
 }
 
-print("✅ Predicting using parsnip-wrapped model")
 rf_test_preds <- predict(rf_model, new_data = processed_test_df, type = "class")
 print(rf_test_preds)
 

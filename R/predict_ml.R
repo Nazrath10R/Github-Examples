@@ -223,9 +223,6 @@ print(colnames(processed_test_df))
 print("🔍 Str of processed_test_df:")
 str(processed_test_df)
 
-print("🔍 Trying raw randomForest prediction:")
-print(predict(rf_model$fit, processed_test_df))
-
 processed_test_df <- processed_test_df %>%
   mutate(across(everything(), as.numeric))
 

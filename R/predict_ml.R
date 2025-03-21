@@ -207,6 +207,17 @@ print(str(rf_model))
 # }, error = function(e) {
 #   stop(paste0("❌ ERROR in prediction: ", e$message))
 # })
+
+# Fix the levels of rf_model$fit$y
+if (is.factor(rf_model$fit$y)) {
+  if (is.null(attr(rf_model$fit$y, "ordered"))) {
+    attr(rf_model$fit$y, "ordered") <- FALSE
+  }
+}
+
+str(rf_model$fit$y)
+
+
 rf_test_preds <- predict(rf_model, processed_test_df, type = "class")
 
 

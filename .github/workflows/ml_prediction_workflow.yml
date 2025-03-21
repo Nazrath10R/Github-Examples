@@ -44,9 +44,15 @@ jobs:
         with:
           r-version: '4.2'
 
+      - name: Install remotes
+        run: Rscript -e "install.packages('remotes')"
+        
+      - name: Install tidymodels 1.1.1
+        run: Rscript -e "remotes::install_version('tidymodels', version = '1.1.1', repos = 'http://cran.us.r-project.org')"
+
       - name: Install Dependencies
         run: |
-          Rscript -e 'install.packages(c("dplyr", "randomForest", "tidymodels"))'
+          Rscript -e 'install.packages(c("dplyr", "randomForest"))'
 
       - name: Run ML Prediction
         run: Rscript R/predict_ml.R ${{ github.event.inputs.model_version }} ${{ github.event.inputs.dataset_version }}

@@ -240,7 +240,8 @@ print(paste("⚠️ Extra columns:", toString(extra)))
 
 
 
-rf_test_preds <- predict(rf_model, processed_test_df, type = "class")
+rf_test_preds <- parsnip::predict(rf_model, new_data = processed_test_df)
+print(rf_test_preds)
 
 
 # Check predictions

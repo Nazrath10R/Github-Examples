@@ -246,9 +246,19 @@ print(levels(rf_model$fit$y))
 
 print("✅ Predicting using parsnip-wrapped model")
 
-# ✅ Patch the model prediction handler to fix 'ordered' error
+# Patch parsnip post-prediction function to avoid ordered = NULL issue
 rf_model$spec$method$pred$class$post <- function(result, object) {
-  factor(result, levels = object$lvl, ordered = FALSE)
+  lvls <- tryCatch({
+    object$lvl
+  }, error = function(e) {
+    levels(object$fit$y)
+  })
+  
+  if (is.null(lvls) || length(lvls) == 0) {
+    stop("❌ ERROR: Cannot determine class levels for prediction.")
+  }
+
+  factor(result, levels = lvls, ordered = FALSE)
 }
 
 rf_test_preds <- predict(rf_model, new_data = processed_test_df, type = "class")

@@ -215,7 +215,29 @@ if (is.factor(rf_model$fit$y)) {
   }
 }
 
-str(rf_model$fit$y)
+# str(rf_model$fit$y)
+
+print("🔍 Columns of processed_test_df:")
+print(colnames(processed_test_df))
+
+print("🔍 Str of processed_test_df:")
+str(processed_test_df)
+
+print("🔍 Trying raw randomForest prediction:")
+print(predict(rf_model$fit, processed_test_df))
+
+processed_test_df <- processed_test_df %>%
+  mutate(across(everything(), as.numeric))
+
+sapply(processed_test_df, class)
+
+expected_cols <- colnames(rf_model$fit$forest$xlevels)
+missing <- setdiff(expected_cols, colnames(processed_test_df))
+extra <- setdiff(colnames(processed_test_df), expected_cols)
+
+print(paste("❌ Missing columns:", toString(missing)))
+print(paste("⚠️ Extra columns:", toString(extra)))
+
 
 
 rf_test_preds <- predict(rf_model, processed_test_df, type = "class")

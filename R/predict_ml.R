@@ -15,12 +15,11 @@ print(paste0("📌 Dataset version: ", dataset_version))
 model_path <- paste0("models/", model_version)
 data_path <- paste0("data/", dataset_version, "/")
 
-
+# Check if model file exists
 print(paste0("📂 Checking if model exists: ", model_path))
 if (!file.exists(model_path)) {
   stop("❌ ERROR: Model file not found! Check model path and filename.")
 }
-
 
 # Check if required files exist
 required_files <- c(
@@ -31,7 +30,7 @@ required_files <- c(
 )
 
 found_files <- 0  # Initialize before the loop
-
+# Check if required files exist
 for (file in required_files) {
   full_path <- file.path(data_path, paste0(dataset_version, "_", file))
   print(paste0("📂 Checking file: ", full_path))
@@ -179,8 +178,21 @@ test_recipe <- test_data %>%
 # Extract the test data
 processed_test_df <- juice(test_recipe)
 
-# Random Forest predictions
-rf_test_preds <- predict(rf_model, processed_test_df)
+# Ensure all factor levels match training data
+processed_test_df <- processed_test_df %>%
+  mutate(across(where(is.factor), ~ factor(., levels = levels(rf_model$fit$levels))))
+
+# Run prediction with error handling
+rf_test_preds <- tryCatch({
+  predict(rf_model, processed_test_df)
+}, error = function(e) {
+  stop(paste0("❌ ERROR in prediction: ", e$message))
+})
+
+# Check predictions
+if (!".pred_class" %in% colnames(rf_test_preds)) {
+  stop("❌ ERROR: Model prediction returned unexpected format. Check processed_test_df.")
+}
 
 # Prepare the RF predictions dataframe
 rf_test_predictions <- data.frame(
@@ -195,12 +207,6 @@ if (nrow(rf_test_predictions) == 0) {
 } else {
   print(paste0("✅ Model predictions completed. Total predictions: ", nrow(rf_test_predictions)))
 }
-
-
-print(paste0("correct predictions: ",
-             length(which(rf_test_predictions$Disease==rf_test_predictions$RF_Predictions)),
-             " / 12"))
-
 
 write.csv(rf_test_predictions, paste0(data_path, "predictions.csv"), row.names = FALSE)
 

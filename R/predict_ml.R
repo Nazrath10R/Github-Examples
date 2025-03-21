@@ -1,8 +1,8 @@
 # Rscript predict_ml "nn2501281606" "nn2501281606"
 
+library(randomForest)
 library(dplyr)
 library(tidymodels)
-
 # take in arguments from the command line
 args <- commandArgs(trailingOnly = TRUE)
 model_version <- args[1]

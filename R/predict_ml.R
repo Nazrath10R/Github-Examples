@@ -182,6 +182,25 @@ processed_test_df <- juice(test_recipe)
 processed_test_df <- processed_test_df %>%
   mutate(across(where(is.factor), ~ factor(., levels = levels(rf_model$fit$levels))))
 
+print("🔍 processed_test_df preview:")
+print(dim(processed_test_df))
+print(head(processed_test_df))
+
+print("🧠 RF Model structure:")
+print(str(rf_model))
+
+single_row <- processed_test_df[1, , drop = FALSE]
+print(single_row)
+
+predict(rf_model, single_row)
+
+for (col in names(processed_test_df)) {
+  print(paste("🧪", col, ":", class(processed_test_df[[col]])))
+  if (is.factor(processed_test_df[[col]])) {
+    print(levels(processed_test_df[[col]]))
+  }
+}
+
 # Run prediction with error handling
 rf_test_preds <- tryCatch({
   predict(rf_model, processed_test_df)

@@ -189,24 +189,26 @@ print(head(processed_test_df))
 print("🧠 RF Model structure:")
 print(str(rf_model))
 
-single_row <- processed_test_df[1, , drop = FALSE]
-print(single_row)
+# single_row <- processed_test_df[1, , drop = FALSE]
+# print(single_row)
 
-predict(rf_model, single_row)
+# predict(rf_model, single_row)
 
-for (col in names(processed_test_df)) {
-  print(paste("🧪", col, ":", class(processed_test_df[[col]])))
-  if (is.factor(processed_test_df[[col]])) {
-    print(levels(processed_test_df[[col]]))
-  }
-}
+# for (col in names(processed_test_df)) {
+#   print(paste("🧪", col, ":", class(processed_test_df[[col]])))
+#   if (is.factor(processed_test_df[[col]])) {
+#     print(levels(processed_test_df[[col]]))
+#   }
+# }
 
 # Run prediction with error handling
-rf_test_preds <- tryCatch({
-  predict(rf_model, processed_test_df)
-}, error = function(e) {
-  stop(paste0("❌ ERROR in prediction: ", e$message))
-})
+# rf_test_preds <- tryCatch({
+#   predict(rf_model, processed_test_df)
+# }, error = function(e) {
+#   stop(paste0("❌ ERROR in prediction: ", e$message))
+# })
+rf_test_preds <- predict(rf_model, processed_test_df, type = "class")
+
 
 # Check predictions
 if (!".pred_class" %in% colnames(rf_test_preds)) {

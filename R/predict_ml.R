@@ -239,8 +239,8 @@ print(paste("❌ Missing columns:", toString(missing)))
 print(paste("⚠️ Extra columns:", toString(extra)))
 
 
-
-rf_test_preds <- parsnip::predict(rf_model, new_data = processed_test_df)
+print("✅ Predicting using parsnip-wrapped model")
+rf_test_preds <- predict(rf_model, new_data = processed_test_df, type = "class")
 print(rf_test_preds)
 
 
